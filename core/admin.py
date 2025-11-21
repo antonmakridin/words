@@ -1,4 +1,7 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Words)
+class MyWord(admin.ModelAdmin):
+    list_display = ['slovo','perevod']
+
+admin.site.register(Words, MyWord)

@@ -1,45 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
         <div class="card">
-            <form id="addWordForm" method="post">
-                <input type="hidden" name="csrfmiddlewaretoken"
-                    value="utbXnF2LNCISugaSsXkjWugzSNUpHbNkJHGWQGvaXZIVW6hWoWQjHRot1HqgPc2c">
-                <div>
-                    <label for="id_text">текст:</label>
+            <form method="POST">
 
-
-
-                    <input type="text" name="text" placeholder="Слово" maxlength="100" required id="id_text">
-
+                {% csrf_token %}
+                {{ form }}
+                <div class="form-block">
+                    <button>Добавить слово</button>
+                    
                 </div>
-
-                <div>
-                    <label for="id_translate">перевод:</label>
-
-
-
-                    <input type="text" name="translate" placeholder="Перевод" maxlength="100" required
-                        id="id_translate">
-
-
-
-                </div>
-                <button type="submit">Добавить слово</button>
             </form>
         </div>
 
         <div class="card" id="wordList">
 
-
+            {% for word in words %}
             <div class="word-item">
                 <span>
-                    <a href="/words/4">
-                        <strong>груша</strong> — peach
+                    <a href="/words/{{ word.id }}">
+                        <strong>{{ word.slovo }}</strong> — {{ word.perevod }}
                     </a>
                 </span>
             </div>
-
-
+            {% endfor %}
 
         </div>
 {% endblock %}

@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+{% block content %}
+       
+
+<div class="card">
+    <h2>Изученные</h2>
+    {% for word in words %}
+    <div class="word-item">
+        <span>
+            <strong>{{ word.slovo }}</strong> — {{ word.perevod }}
+        </span>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h3>Заметки</h3>
+    <form id="noteForm" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-block">
+            <button>Добавить</button>            
+        </div>
+    </form>
+
+    <div id="notes">
+        {% for note in notes %}
+        <div class="note">{{ note.note }}</div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

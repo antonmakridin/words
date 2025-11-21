@@ -12,3 +12,13 @@ class Words(models.Model):
 
     def __str__(self):
         return self.slovo
+    
+class Note(models.Model):
+    note = models.TextField(verbose_name='Заметка')
+    # чтобы отображались красивые названия в админке
+    class Meta:
+        verbose_name = 'Заметка'
+        verbose_name_plural = 'Заметки'
+
+    def __str__(self):
+        return self.slovo

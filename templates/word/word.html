@@ -4,52 +4,22 @@
        
 
 <div class="card">
-    <h2 id="wordTitle">котитк</h2>
-    <h2 id="translation">cat</h2>
+    <h2 id="wordTitle">{{ words.slovo }}</h2>
+    <h2 id="translation">{{ words.perevod }}</h2>
     <p>Статус: На изучении</p>
 
     <div class="button-form">
-        <form method="post" action="/words/3/learn">
-            <input type="hidden" name="csrfmiddlewaretoken" value="uPM9FS3PwGNasQw0TEDUUIe8QGS11TSMJ3h88TweG3NdUGD4PD9UF5m2ZAoS9U7E">
+        <form id="learn" method="post" action="{% url 'learn_word' words.id %}">
+            {% csrf_token %}
             <button>Отметить изученным</button>
         </form>
-
     </div>
     <div class="button-form">
-        <form method="post" action="/words/3/delete">
-            <input type="hidden" name="csrfmiddlewaretoken" value="uPM9FS3PwGNasQw0TEDUUIe8QGS11TSMJ3h88TweG3NdUGD4PD9UF5m2ZAoS9U7E">
+        <form id="delete" method="post" action="{% url 'delete_word' words.id %}">
+            {% csrf_token %}
             <button>Удалить</button>
         </form>
     </div>
 </div>
-
-<div class="card">
-    <h3>Заметки</h3>
-    <form id="noteForm" method="post">
-        <input type="hidden" name="csrfmiddlewaretoken" value="uPM9FS3PwGNasQw0TEDUUIe8QGS11TSMJ3h88TweG3NdUGD4PD9UF5m2ZAoS9U7E">
-        <div>
-    <label for="id_note">заметка:</label>
-
-
-
-<textarea name="note" cols="40" rows="4" placeholder="Введите заметку здесь..." required id="id_note">
-</textarea>
-    
-      
-    
-</div>
-        <button type="submit">Добавить</button>
-    </form>
-    <div id="notes">
-        
-        <div class="note">ыфва</div>
-        
-        <div class="note">ыфва</div>
-        
-        <div class="note">хорошее слово</div>
-        
-    </div>
-</div>
-
 
 {% endblock %}

@@ -5,7 +5,10 @@ from .views import *
 
 urlpatterns = [
     path('', main),
-    path('word/', word)
+    path('word/', word),
+    path('words/<int:word_id>',  show_word, name='show_word'),
+    path('words/<int:word_id>/learn',  learn_word, name='learn_word'),
+    path('words/<int:word_id>/delete',  delete_word, name='delete_word'),
     # # path('catalog/', catalog),
     # path('products/', pro,ducts),
     # path('feedback/', add_feedback),
