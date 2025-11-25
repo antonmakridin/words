@@ -15,7 +15,7 @@
 
         <div class="card menu">
             <a href="/">Главная</a>
-            <a href="/word/">Изученные</a>
+            <a href="/?status=1" {% if status == '1' %}class = "active"{% endif %}>Изученные</a>
         </div>
         
         {% block content %}

@@ -8,7 +8,7 @@
     {% for word in words %}
     <div class="word-item">
         <span>
-            <strong>{{ word.slovo }}</strong> — {{ word.perevod }}
+            <strong><a href="/words/{{ word.id }}">{{ word.slovo }}</strong> — {{ word.perevod }}</a>
         </span>
     </div>
     {% endfor %}

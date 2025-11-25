@@ -93,3 +93,6 @@ textarea {
     display: inline-block;
     margin-right: 10px;
 }
+.active {
+    color: red !important;
+}

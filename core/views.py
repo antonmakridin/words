@@ -8,8 +8,35 @@ from django.contrib import messages
 
 from .models import *
 
+def raz(num):
+    numbers = {
+    '1': 'раз',
+    '2': 'раза',
+    '3': 'раза',
+    '4': 'раза',
+    '5': 'раз',
+    '6': 'раз',
+    '7': 'раз',
+    '8': 'раз',
+    '9': 'раз',
+    '0': 'раз'
+    }
+    for key, value in numbers.items():
+        if key == num:
+            return(value)
+
 # Create your views here.
 def main(request):
+    status = request.GET.get('status')
+    if status:
+        words = Words.objects.all().filter(is_active=status)
+    else:
+        words = Words.objects.all().filter(is_active=False)
+    # Number of visits to this view, as counted in the session variable.
+    num_visits=request.session.get('num_visits', 0)
+    razn = raz(str(num_visits)[-1])
+    request.session['num_visits'] = num_visits+1
+
     if request.method == 'POST':
         form = AddWord(request.POST)
         if form.is_valid():
@@ -27,29 +54,32 @@ def main(request):
                 return redirect('/')
     else:
         form = AddWord()
-
-    words = Words.objects.all().filter(is_active=False)
+    
+    if request.method == 'POST':
+        formNote = AddNote(request.POST)
+        if formNote.is_valid():
+            data = formNote.cleaned_data
+            note = Note.objects.create(**data)
+            return redirect('/?status=1')
+    else:
+        formNote = AddNote()
+    notes = Note.objects.all()
     context = {
         'words': words,
         'form': form,
+        'num_visits':num_visits,
+        'razn' : razn,
+        'formNote': formNote,
+        'status': status,
+        'notes': notes,
     }
     return render(request, 'word/main.html', context)
 
 def word(request):
-    if request.method == 'POST':
-        form = AddNote(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            note = Note.objects.create(**data)
-            return redirect('/word/')
-    else:
-        form = AddNote()
-    notes = Note.objects.all()
+    
     words = Words.objects.all().filter(is_active=True)
     context = {
         'words': words,
-        'form': form,
-        'notes': notes,
     }
     return render(request, 'word/word_success.html', context)
 
@@ -68,7 +98,9 @@ def delete_word(request, word_id):
 
 def learn_word(request, word_id):
     word = get_object_or_404(Words, id=word_id)
-    word.is_active = True
+    if word.is_active == True:
+        word.is_active = False
+    else:
+        word.is_active = True
     word.save()
-    messages.success(request, f'Слово "{word.slovo}" отмечено как изученное')
-    return redirect('/')
+    return redirect('show_word', word.id)

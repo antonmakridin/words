@@ -12,7 +12,7 @@ class AddWord(forms.Form):
         )
     
     
-class AddNote(forms.Form):
+class AddNote_old(forms.Form):
     note = forms.CharField(
         widget=forms.Textarea(attrs={
             'placeholder': 'Введите заметку здесь...',
@@ -20,3 +20,8 @@ class AddNote(forms.Form):
         }),
         label='заметка:'
     )
+
+class AddNote(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ['note']
