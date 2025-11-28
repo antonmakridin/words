@@ -26,24 +26,6 @@
             {% endfor %}
 
         </div>
-        {% if status == '1' %}
-        <div class="card">
-            <h3>Заметки</h3>
-            <form id="noteForm" method="POST">
-                {% csrf_token %}
-                {{ formNote.as_div }}
-                <div class="form-block">
-                    <button>Добавить</button>            
-                </div>
-            </form>
-
-            <div id="notes">
-                {% for note in notes %}
-                <div class="note">{{ note.note }}</div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
         <p>
   Вы посещали эту страницу {{ num_visits }} {{ razn }}.</p>
 {% endblock %}

@@ -1,7 +1,13 @@
 from django import forms
 from .models import *
 
-class AddWord(forms.Form):
+class AddWord(forms.ModelForm):
+    class Meta:
+        model = Words
+        fields = ['slovo', 'perevod']
+        
+
+class AddWord_old(forms.Form):
     slovo = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Слово'}),
         label='текст:'
@@ -21,7 +27,11 @@ class AddNote_old(forms.Form):
         label='заметка:'
     )
 
+
 class AddNote(forms.ModelForm):
     class Meta:
         model = Note
         fields = ['note']
+        widgets = {
+            'note': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+        }

@@ -43,15 +43,9 @@ def main(request):
             for field_name, field in form.cleaned_data.items():
                 if isinstance(field, str):
                     form.cleaned_data[field_name] = field.lower()
-            in_slovo = form.cleaned_data.get('slovo').lower()
-            if Words.objects.filter(slovo=in_slovo,is_active=False).exists():
-                form.add_error('slovo', 'Такое слово уже изучено.')
-            elif Words.objects.filter(slovo=in_slovo,is_active=True).exists():
-                form.add_error('slovo', 'Такое слово добавлено в список для изучения.')
-            else:
-                data = form.cleaned_data
-                words = Words.objects.create(**data)
-                return redirect('/')
+            data = form.cleaned_data
+            words = Words.objects.create(**data)
+            return redirect('/')
     else:
         form = AddWord()
     
@@ -69,9 +63,7 @@ def main(request):
         'form': form,
         'num_visits':num_visits,
         'razn' : razn,
-        'formNote': formNote,
         'status': status,
-        'notes': notes,
     }
     return render(request, 'word/main.html', context)
 
@@ -84,11 +76,26 @@ def word(request):
     return render(request, 'word/word_success.html', context)
 
 def show_word(request, word_id):
-    words = Words.objects.get(id=word_id)
+    word = Words.objects.get(id=word_id)
+    notes = Note.objects.filter(word_id=word_id)
+    
+    if request.method == 'POST':
+        formNote = AddNote(request.POST)
+        if formNote.is_valid():
+            note = formNote.save(commit=False)
+            note.word = word
+            note.save()
+            return redirect('show_word', word_id)
+    else:
+        formNote = AddNote()
+        
     context = {
-        'words': words,
+        'word': word,
+        'notes': notes,
+        'formNote': formNote,
     }
     return render(request, 'word/word.html', context)
+        
 
 def delete_word(request, word_id):
     words = Words.objects.get(id=word_id)
@@ -103,4 +110,4 @@ def learn_word(request, word_id):
     else:
         word.is_active = True
     word.save()
-    return redirect('show_word', word.id)
+    return redirect('show_word', word_id)
