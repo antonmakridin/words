@@ -9,18 +9,14 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Вход</h1>
+        <h1>Регистрация</h1>
         <form method="POST">
             {% csrf_token %}
             {{ form }}
             
-            <button type="submit">Войти</button>
+            <button type="submit">Зарегистрироваться</button>
             
         </form>
-        
-        <div class="form-footer">
-            Нет учетной записи? <a href="{% url 'registration' %}">Зарегистрироваться</a>
-        </div>
     </div>
 </body>
 </html>

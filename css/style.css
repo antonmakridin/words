@@ -167,3 +167,7 @@ button:hover {
     color: #667eea;
     text-decoration: none;
 }
+
+.right {
+    float: right;
+}
