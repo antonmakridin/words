@@ -23,9 +23,10 @@ class Note(models.Model):
     note = models.TextField(verbose_name='Заметка')
     word = models.ForeignKey(
         Words, 
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=False,
+        related_name='zametki',
         verbose_name='Пара слов'
     )
     # чтобы отображались красивые названия в админке

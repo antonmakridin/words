@@ -4,13 +4,7 @@ from .views import *
 """импортируем все функции из views"""
 
 urlpatterns = [
-    path('', main),
-    path('word/', word),
-    path('words/<int:word_id>',  show_word, name='show_word'),
-    path('words/<int:word_id>/learn',  learn_word, name='learn_word'),
-    path('words/<int:word_id>/delete',  delete_word, name='delete_word'),
-    path('hello', HelloView.as_view()),
-    path('template', MyTemplateView.as_view()),
+    path('login', login, name='login'),
     # # path('catalog/', catalog),
     # path('products/', pro,ducts),
     # path('feedback/', add_feedback),

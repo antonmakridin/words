@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from django.urls import reverse
+from django.views import View
+from django.views.generic import TemplateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Words
 from .forms import AddWord, AddNote
@@ -77,7 +79,9 @@ def word(request):
 
 def show_word(request, word_id):
     word = Words.objects.get(id=word_id)
-    notes = Note.objects.filter(word_id=word_id)
+    # notes = Note.objects.filter(word_id=word_id)
+    # эквивалент
+    notes = word.zametki.all()
     
     if request.method == 'POST':
         formNote = AddNote(request.POST)
@@ -111,3 +115,30 @@ def learn_word(request, word_id):
         word.is_active = True
     word.save()
     return redirect('show_word', word_id)
+
+
+
+class HelloView(View):
+
+    def get_words(self):
+        word = Words.objects.all()
+        return word
+
+    def get(self, request):
+        word = self.get_words
+        context = {'words': word}
+        return render(request, 'class.html', context)
+    
+    def post(self, request):
+        pass
+    
+
+class MyTemplateView(TemplateView):
+    template_name = 'class.html'
+
+    def get_context_data(self, **kwargs):
+        # context = super().get_context_data(**kwargs)
+        # context['words'] = Words.objects.all()
+        # return context
+
+        return {'words': 'slovechko'}
