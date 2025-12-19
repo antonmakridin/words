@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+
+{% if request.user.is_authenticated  %}
+
         {% if status != '1' %}
         <div class="card">
             <form method="POST">
@@ -28,4 +31,10 @@
         </div>
         <p>
   Вы посещали эту страницу {{ num_visits }} {{ razn }}.</p>
+
+
+    {% else %}
+    <a href="{% url 'login' %}">Войдите, чтобы добавлять слова</a>
+    {% endif %}
+    
 {% endblock %}

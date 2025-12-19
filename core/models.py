@@ -1,9 +1,12 @@
 from django.db import models
+from users.models import Profile
+
 
 class Words(models.Model):
     slovo = models.CharField(max_length=200, verbose_name='Слово')
     perevod = models.CharField(max_length=200, verbose_name='Перевод')
     is_active = models.BooleanField(default=False, verbose_name='Изучено')
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='профиль пользователя')
 
     def unique_error_message(self, model_class, unique_check):
         if unique_check == ('slovo', 'perevod'):

@@ -7,6 +7,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Words
 from .forms import AddWord, AddNote
 from django.contrib import messages
+from django.shortcuts import render, redirect, Http404
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 
@@ -39,7 +41,7 @@ def main(request):
     razn = raz(str(num_visits)[-1])
     request.session['num_visits'] = num_visits+1
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         form = AddWord(request.POST)
         if form.is_valid():
             for field_name, field in form.cleaned_data.items():
@@ -60,6 +62,7 @@ def main(request):
     else:
         formNote = AddNote()
     notes = Note.objects.all()
+
     context = {
         'words': words,
         'form': form,
@@ -69,9 +72,15 @@ def main(request):
     }
     return render(request, 'word/main.html', context)
 
-def word(request):
-    
+@login_required
+def word(request, word_id):
+
+    profile = request.user.profile
     words = Words.objects.all().filter(is_active=True)
+
+    if profile.id != words.profile.id:
+        raise Http404
+
     context = {
         'words': words,
     }
