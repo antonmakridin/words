@@ -6,6 +6,7 @@
     <title>{% block title %} Изучение слов {% endblock %}</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/main.js' %}"></script>
 </head>
 
 <body>
@@ -27,6 +28,10 @@
         {% block content %}
         {% endblock %}
 
+        <div class="card">
+            <button id="thx">Сказать спасибо</button>
+            сейчас <span id="likes-data"> {{ likes_count.likes }} </span> человек(а) сказали спасибо!
+        </div>
         
 
 

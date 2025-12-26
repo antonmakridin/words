@@ -1,14 +1,18 @@
+import json
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Words
+from .models import Words, LikesCounter
 from .forms import AddWord, AddNote
 from django.contrib import messages
 from django.shortcuts import render, redirect, Http404
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
@@ -63,12 +67,15 @@ def main(request):
         formNote = AddNote()
     notes = Note.objects.all()
 
+    likes_count = LikesCounter.objects.get(slug="main")
+
     context = {
         'words': words,
         'form': form,
         'num_visits':num_visits,
         'razn' : razn,
         'status': status,
+        'likes_count': likes_count,
     }
     return render(request, 'word/main.html', context)
 
@@ -146,8 +153,29 @@ class MyTemplateView(TemplateView):
     template_name = 'class.html'
 
     def get_context_data(self, **kwargs):
-        # context = super().get_context_data(**kwargs)
-        # context['words'] = Words.objects.all()
-        # return context
-
         return {'words': 'slovechko'}
+    
+def testjs(request):
+    print('Новый запрос')
+    return render(request, 'testjs.html' )
+
+def get_data(request):
+
+    return JsonResponse({'text': 'привет'})
+
+@csrf_exempt
+def thx_data(request):
+
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        name_slug = data.get('slug')
+        if not name_slug:
+            return JsonResponse({'error': 'No slug provided'}, status=400)
+
+        try:
+            likes_counter = LikesCounter.objects.get(slug=name_slug)
+            likes_counter.likes += 1
+            likes_counter.save()
+            return JsonResponse({'likes_count': likes_counter.likes})
+        except LikesCounter.DoesNotExist:
+            return JsonResponse({'error': 'Invalid slug'}, status=400)

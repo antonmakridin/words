@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Тренировка JS</h1>
+<div id="content"></div>
+<div id="server-data"></div>
+<button>Клик</button>
+<button id="money">Дать денег</button>
+<button id="server">Сходить на сервер</button>
+<script>
+    const mybutton = document.querySelector('button')
+    const money = document.querySelector('#money')
+    const server = document.querySelector('#server')
+    const server_data = document.querySelector('#server-data')
+
+    console.log(mybutton)
+
+    mybutton.onclick = function (){
+        const mydiv = document.querySelector('#content')
+        mydiv.textContent = 'Дай денег'
+    }
+
+    money.onclick = function (){
+        const mydiv = document.querySelector('#content')
+        mydiv.textContent = 'Спасибо! 🧡🧡🧡'
+    }
+
+    server.onclick = function (){
+        fetch('http://127.0.0.1:8000/get_data')
+        .then(res => res.json())
+        .then(
+            data => {
+                server_data.textContent = data.text
+            }
+        )
+    }
+</script>
+</body>
+</html>

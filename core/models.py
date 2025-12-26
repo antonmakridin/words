@@ -39,3 +39,15 @@ class Note(models.Model):
 
     def __str__(self):
         return self.note
+
+class LikesCounter(models.Model):
+    name = models.CharField(max_length=200, verbose_name='Имя')
+    slug = models.SlugField(max_length=200, verbose_name='Кодовое название')
+    likes = models.IntegerField(default=0, verbose_name='Количество')
+
+    class Meta:
+        verbose_name = 'Счетчик спасибок'
+        verbose_name_plural = 'Счетчики спасибок'
+
+    def __str__(self):
+        return self.name
